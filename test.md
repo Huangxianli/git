@@ -13,3 +13,5 @@ git add test.md test1.md
 
 git commit -m "添加信息"
 git commit --amend --no-edit 漏加文件或写错信息？吸纳暂存区并重写上一次 commit（不产生新节点）
+
+**主要是用来进行一次 commit 后还没有 push 的情况下进行文件的追加，但是这次追加是漏的**
