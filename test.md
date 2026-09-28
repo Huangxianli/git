@@ -8,3 +8,8 @@
 ```git
 git add test.md test1.md
 ````
+
+
+
+git commit -m "添加信息"
+git commit --amend --no-edit 漏加文件或写错信息？吸纳暂存区并重写上一次 commit（不产生新节点）
