@@ -21,4 +21,11 @@ git diff 判断*工作区和暂存区*的对比，会将工作区的文件和暂
 
 git diff --staged 判断*暂存区和本地库*的对比
 
-git  diff HEAD 判断*工作区和本地库*的对比
+git diff HEAD 判断*工作区和本地库*的对比
+
+
+git restore [文件名] 放弃工作区的修改，恢复到暂存区
+
+git restore --staged [文件名] 将暂存区的文件移出暂存区，返回工作区
+
+git rm --cached [文件名] 从版本控制中移除追踪，但物理硬盘保留该文件
