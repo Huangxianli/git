@@ -15,6 +15,7 @@ git add test.md test1.md
 
 git commit -m "添加信息"
 git commit --amend --no-edit 漏加文件或写错信息？吸纳暂存区并重写上一次 commit（不产生新节点）
+> amend 是修正、修补的意思
 
 **主要是用来进行一次 commit 后还没有 push 的情况下进行文件的追加，但是这次追加是漏的**
 
@@ -22,11 +23,13 @@ git commit --amend --no-edit 漏加文件或写错信息？吸纳暂存区并重
 git diff 判断*工作区和暂存区*的对比，会将工作区的文件和暂存区的文件进行对比，比较修改了哪些内容 **如果是新建的文件，没有添加到暂存区的时候，是不会显示出来的**
 
 git diff --staged 判断*暂存区和本地库*的对比
+> staged 的意思是已暂存的
 
 git diff HEAD 判断*工作区和本地库*的对比
 
 
 git restore [文件名] 放弃工作区的修改，恢复到暂存区，丢弃工作区还没 add 的修改
+> restore 是复原的意思
 
 git restore --staged [文件名] 将暂存区的文件移出暂存区，返回工作区
 
