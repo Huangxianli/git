@@ -1,3 +1,5 @@
+测试 git status -s
+
 测试 git add -p [文件名]
 -p 参数只能够审查到改变的文件，不能审查到新创建的文件
 
@@ -24,7 +26,7 @@ git diff --staged 判断*暂存区和本地库*的对比
 git diff HEAD 判断*工作区和本地库*的对比
 
 
-git restore [文件名] 放弃工作区的修改，恢复到暂存区
+git restore [文件名] 放弃工作区的修改，恢复到暂存区，丢弃工作区还没 add 的修改
 
 git restore --staged [文件名] 将暂存区的文件移出暂存区，返回工作区
 
