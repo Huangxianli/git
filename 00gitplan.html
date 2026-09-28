@@ -1,0 +1,1595 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Git 全流程学习规划路线图 · 从入门到精通</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0a0d14;
+            --bg-secondary: #101625;
+            --bg-card: rgba(19, 27, 46, 0.72);
+            --bg-card-hover: rgba(26, 37, 63, 0.85);
+            --border-color: rgba(255, 255, 255, 0.08);
+            --border-highlight: rgba(240, 80, 50, 0.35);
+            
+            --git-orange: #f05032;
+            --git-orange-glow: rgba(240, 80, 50, 0.25);
+            --accent-cyan: #38bdf8;
+            --accent-purple: #a855f7;
+            --accent-emerald: #10b981;
+            --accent-amber: #f59e0b;
+            
+            --text-main: #f1f5f9;
+            --text-muted: #94a3b8;
+            --text-dim: #64748b;
+            
+            --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Microsoft YaHei", sans-serif;
+            --font-mono: 'Fira Code', Consolas, "Courier New", monospace;
+            
+            --radius-sm: 8px;
+            --radius-md: 14px;
+            --radius-lg: 20px;
+            --shadow-card: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+            --transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-primary);
+            color: var(--text-main);
+            font-family: var(--font-sans);
+            line-height: 1.6;
+            min-height: 100vh;
+            background-image: 
+                radial-gradient(at 10% 15%, rgba(240, 80, 50, 0.12) 0px, transparent 50%),
+                radial-gradient(at 85% 25%, rgba(56, 189, 248, 0.1) 0px, transparent 45%),
+                radial-gradient(at 50% 80%, rgba(168, 85, 247, 0.08) 0px, transparent 50%);
+            background-attachment: fixed;
+            padding-bottom: 80px;
+        }
+
+        /* Top Header */
+        header {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 48px 24px 28px;
+            text-align: center;
+            position: relative;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 16px;
+            border-radius: 9999px;
+            background: rgba(240, 80, 50, 0.12);
+            border: 1px solid rgba(240, 80, 50, 0.3);
+            color: #ff785a;
+            font-size: 0.85rem;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            margin-bottom: 16px;
+        }
+
+        .badge-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--git-orange);
+            box-shadow: 0 0 10px var(--git-orange);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.3); opacity: 0.6; }
+        }
+
+        h1 {
+            font-size: clamp(2rem, 4vw, 3.2rem);
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            background: linear-gradient(135deg, #ffffff 40%, #cbd5e1 70%, var(--git-orange) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 14px;
+        }
+
+        .subtitle {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            max-width: 700px;
+            margin: 0 auto 28px;
+        }
+
+        /* Stats & Interactive Progress Dashboard */
+        .dashboard-bar {
+            max-width: 1000px;
+            margin: 0 auto 40px;
+            background: var(--bg-card);
+            backdrop-filter: blur(16px);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 24px 32px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 24px;
+            box-shadow: var(--shadow-card);
+        }
+
+        .stat-item {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .stat-label {
+            font-size: 0.82rem;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            font-weight: 600;
+        }
+
+        .stat-value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--text-main);
+            font-family: var(--font-mono);
+        }
+
+        .progress-box {
+            grid-column: 1 / -1;
+            margin-top: 8px;
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+        }
+
+        .progress-track {
+            height: 10px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.06);
+            border-radius: 999px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .progress-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, var(--git-orange), var(--accent-cyan));
+            border-radius: 999px;
+            transition: width 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            box-shadow: 0 0 12px var(--git-orange-glow);
+        }
+
+        /* Navigation Tabs */
+        .tab-nav {
+            max-width: 1100px;
+            margin: 0 auto 36px;
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            padding: 0 16px;
+        }
+
+        .tab-btn {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--border-color);
+            color: var(--text-muted);
+            padding: 10px 22px;
+            border-radius: 999px;
+            cursor: pointer;
+            font-family: var(--font-sans);
+            font-size: 0.95rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: var(--transition);
+        }
+
+        .tab-btn:hover {
+            color: var(--text-main);
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.2);
+            transform: translateY(-1px);
+        }
+
+        .tab-btn.active {
+            background: var(--git-orange);
+            color: #ffffff;
+            border-color: var(--git-orange);
+            box-shadow: 0 4px 20px var(--git-orange-glow);
+        }
+
+        /* Main Container */
+        main {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .tab-pane {
+            display: none;
+            animation: fadeIn 0.35s ease;
+        }
+
+        .tab-pane.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Visual Architecture Card */
+        .architecture-banner {
+            background: linear-gradient(135deg, rgba(30, 41, 69, 0.8), rgba(15, 23, 42, 0.9));
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 28px;
+            margin-bottom: 36px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .architecture-title {
+            font-size: 1.15rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--accent-cyan);
+        }
+
+        .architecture-diagram {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            position: relative;
+        }
+
+        .arch-node {
+            background: rgba(0, 0, 0, 0.35);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 16px;
+            text-align: center;
+            transition: var(--transition);
+        }
+
+        .arch-node:hover {
+            border-color: var(--accent-cyan);
+            transform: translateY(-2px);
+        }
+
+        .arch-node .node-tag {
+            font-size: 0.72rem;
+            font-family: var(--font-mono);
+            color: var(--text-dim);
+            text-transform: uppercase;
+            margin-bottom: 4px;
+        }
+
+        .arch-node .node-name {
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: var(--text-main);
+            margin-bottom: 8px;
+        }
+
+        .arch-node .node-desc {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .arch-arrow {
+            font-size: 0.75rem;
+            color: var(--git-orange);
+            font-family: var(--font-mono);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 8px;
+            padding-top: 6px;
+            border-top: 1px dashed rgba(255, 255, 255, 0.1);
+        }
+
+        /* Timeline & Phase Cards */
+        .timeline {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            gap: 32px;
+        }
+
+        .phase-card {
+            background: var(--bg-card);
+            backdrop-filter: blur(14px);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 30px;
+            box-shadow: var(--shadow-card);
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .phase-card:hover {
+            border-color: rgba(255, 255, 255, 0.18);
+            background: var(--bg-card-hover);
+        }
+
+        .phase-card.active-phase {
+            border-left: 4px solid var(--git-orange);
+        }
+
+        .phase-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .phase-meta {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .phase-number {
+            width: 38px;
+            height: 38px;
+            border-radius: 12px;
+            background: rgba(240, 80, 50, 0.15);
+            color: var(--git-orange);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 1.1rem;
+            border: 1px solid rgba(240, 80, 50, 0.3);
+        }
+
+        .phase-title-group h2 {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        .phase-title-group .phase-time {
+            font-size: 0.85rem;
+            color: var(--accent-cyan);
+            font-family: var(--font-mono);
+            font-weight: 500;
+        }
+
+        .phase-badge {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-color);
+            padding: 4px 12px;
+            border-radius: 999px;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .phase-goal {
+            background: rgba(0, 0, 0, 0.25);
+            border-left: 3px solid var(--accent-cyan);
+            padding: 12px 18px;
+            border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+            font-size: 0.92rem;
+            color: #cbd5e1;
+            margin-bottom: 22px;
+        }
+
+        /* Checkbox & Tasks */
+        .task-list {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .task-item {
+            background: rgba(10, 15, 28, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            border-radius: var(--radius-md);
+            padding: 16px 20px;
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+            transition: var(--transition);
+            cursor: pointer;
+        }
+
+        .task-item:hover {
+            background: rgba(255, 255, 255, 0.03);
+            border-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .task-item.completed {
+            background: rgba(16, 185, 129, 0.05);
+            border-color: rgba(16, 185, 129, 0.25);
+        }
+
+        .task-item.completed .task-text {
+            text-decoration: line-through;
+            color: var(--text-dim);
+        }
+
+        .custom-checkbox {
+            appearance: none;
+            -webkit-appearance: none;
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--text-dim);
+            border-radius: 6px;
+            outline: none;
+            cursor: pointer;
+            margin-top: 3px;
+            flex-shrink: 0;
+            transition: var(--transition);
+            position: relative;
+            background: transparent;
+        }
+
+        .custom-checkbox:checked {
+            background: var(--accent-emerald);
+            border-color: var(--accent-emerald);
+        }
+
+        .custom-checkbox:checked::after {
+            content: "✓";
+            position: absolute;
+            color: #ffffff;
+            font-size: 14px;
+            font-weight: bold;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .task-content {
+            flex: 1;
+        }
+
+        .task-title {
+            font-weight: 600;
+            font-size: 1rem;
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .task-desc {
+            font-size: 0.88rem;
+            color: var(--text-muted);
+            margin-bottom: 10px;
+        }
+
+        /* Code snippets and inline code */
+        code {
+            font-family: var(--font-mono);
+            background: rgba(240, 80, 50, 0.1);
+            color: #ff9d84;
+            padding: 2px 7px;
+            border-radius: 5px;
+            font-size: 0.88em;
+            border: 1px solid rgba(240, 80, 50, 0.2);
+        }
+
+        .code-block {
+            background: #060911;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: var(--radius-sm);
+            padding: 12px 16px;
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+            color: #38bdf8;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 8px;
+            position: relative;
+        }
+
+        .code-block span {
+            overflow-x: auto;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+
+        .copy-btn {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            color: var(--text-muted);
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: var(--transition);
+            flex-shrink: 0;
+            margin-left: 10px;
+        }
+
+        .copy-btn:hover {
+            color: #ffffff;
+            background: rgba(255, 255, 255, 0.18);
+        }
+
+        /* Cheat Sheet Grid */
+        .cheatsheet-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 20px;
+        }
+
+        .cheat-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 22px;
+            backdrop-filter: blur(12px);
+        }
+
+        .cheat-card h3 {
+            font-size: 1.15rem;
+            margin-bottom: 14px;
+            color: var(--accent-cyan);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            padding-bottom: 10px;
+        }
+
+        .cheat-row {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            margin-bottom: 12px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+        }
+
+        .cheat-row:last-child {
+            margin-bottom: 0;
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+
+        .cheat-cmd {
+            font-family: var(--font-mono);
+            font-size: 0.86rem;
+            color: #fb923c;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 4px 8px;
+            border-radius: 4px;
+        }
+
+        .cheat-desc {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        /* Rescue Box (Emergency FAQ) */
+        .emergency-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 18px;
+        }
+
+        .emergency-card {
+            background: var(--bg-card);
+            border: 1px solid rgba(239, 68, 68, 0.25);
+            border-radius: var(--radius-md);
+            padding: 22px;
+            position: relative;
+        }
+
+        .emergency-card::before {
+            content: "SOS";
+            position: absolute;
+            right: 20px;
+            top: 20px;
+            font-size: 0.75rem;
+            font-weight: 800;
+            font-family: var(--font-mono);
+            color: #ef4444;
+            background: rgba(239, 68, 68, 0.1);
+            padding: 3px 8px;
+            border-radius: 4px;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+
+        .emergency-q {
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: #fca5a5;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .emergency-solution {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-bottom: 12px;
+        }
+
+        /* Resources Links */
+        .resource-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+            transition: var(--transition);
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .resource-card:hover {
+            border-color: var(--accent-purple);
+            transform: translateX(4px);
+            background: var(--bg-card-hover);
+        }
+
+        .resource-info h4 {
+            font-size: 1.1rem;
+            color: var(--text-main);
+            margin-bottom: 6px;
+        }
+
+        .resource-info p {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .resource-tag {
+            background: rgba(168, 85, 247, 0.15);
+            color: #c084fc;
+            padding: 4px 12px;
+            border-radius: 999px;
+            font-size: 0.78rem;
+            font-weight: 600;
+            border: 1px solid rgba(168, 85, 247, 0.3);
+        }
+
+        /* Floating Toast */
+        #toast {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: #1e293b;
+            color: #ffffff;
+            padding: 12px 24px;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.3s ease;
+            pointer-events: none;
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        #toast.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .dashboard-bar {
+                padding: 18px 20px;
+                grid-template-columns: 1fr;
+            }
+            .phase-card {
+                padding: 20px 16px;
+            }
+            .architecture-diagram {
+                grid-template-columns: 1fr;
+            }
+            .resource-card {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header Section -->
+    <header>
+        <div class="badge">
+            <span class="badge-dot"></span>
+            Git Master Roadmap · 2026 Edition
+        </div>
+        <h1>Git 学习与实操实战路线图</h1>
+        <p class="subtitle">从单兵代码管理，到分支协作流、团队工作流与救命级时光机操作，助你彻底掌握版本控制的核心逻辑与工程实践。</p>
+    </header>
+
+    <!-- Interactive Progress Dashboard -->
+    <div class="dashboard-bar">
+        <div class="stat-item">
+            <span class="stat-label">阶段总数</span>
+            <div class="stat-value">5 个阶段</div>
+        </div>
+        <div class="stat-item">
+            <span class="stat-label">预计周期</span>
+            <div class="stat-value">15~21 天</div>
+        </div>
+        <div class="stat-item">
+            <span class="stat-label">已达成目标</span>
+            <div class="stat-value" id="completedCount">0 / 20</div>
+        </div>
+        <div class="progress-box">
+            <div class="progress-header">
+                <span style="font-weight:600; color: var(--text-main);">综合学习进度</span>
+                <span id="progressPercentage" style="font-family: var(--font-mono); color: var(--accent-cyan); font-weight:700;">0%</span>
+            </div>
+            <div class="progress-track">
+                <div class="progress-fill" id="progressBar"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation Tabs -->
+    <div class="tab-nav">
+        <button class="tab-btn active" onclick="switchTab('plan', this)">🗺️ 学习规划路线</button>
+        <button class="tab-btn" onclick="switchTab('cheatsheet', this)">⚡ 常用高频速查</button>
+        <button class="tab-btn" onclick="switchTab('emergency', this)">🚨 Git 急救箱 (常见翻车处理)</button>
+        <button class="tab-btn" onclick="switchTab('resources', this)">📚 精选工具与进阶资源</button>
+    </div>
+
+    <main>
+        <!-- TAB 1: 学习规划路线 -->
+        <div id="tab-plan" class="tab-pane active">
+
+            <!-- Architecture Diagram Banner -->
+            <div class="architecture-banner">
+                <div class="architecture-title">
+                    <span>🧠 Git 底层核心流向逻辑（必背知识模型）</span>
+                </div>
+                <div class="architecture-diagram">
+                    <div class="arch-node">
+                        <div class="node-tag">Local Workspace</div>
+                        <div class="node-name">1. 工作区</div>
+                        <div class="node-desc">你的项目文件夹，随时编辑与新建文件</div>
+                        <div class="arch-arrow">git add ➔</div>
+                    </div>
+                    <div class="arch-node">
+                        <div class="node-tag">Index / Stage</div>
+                        <div class="node-name">2. 暂存区</div>
+                        <div class="node-desc">即将提交的快照准备室，版本缓冲区</div>
+                        <div class="arch-arrow">git commit ➔</div>
+                    </div>
+                    <div class="arch-node">
+                        <div class="node-tag">Local Repository</div>
+                        <div class="node-name">3. 本地仓库</div>
+                        <div class="node-desc">存放在 .git 目录中，永久历史快照链</div>
+                        <div class="arch-arrow">git push ➔</div>
+                    </div>
+                    <div class="arch-node">
+                        <div class="node-tag">Remote (GitHub/Gitee)</div>
+                        <div class="node-name">4. 远程仓库</div>
+                        <div class="node-desc">云端代码中心，团队协作共享的核心枢纽</div>
+                        <div class="arch-arrow">git fetch / pull ➔</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Timeline Stages -->
+            <div class="timeline">
+
+                <!-- 阶段一 -->
+                <div class="phase-card active-phase">
+                    <div class="phase-header">
+                        <div class="phase-meta">
+                            <div class="phase-number">01</div>
+                            <div class="phase-title-group">
+                                <h2>阶段一：单兵作战与版本控制基础</h2>
+                                <span class="phase-time">⏱️ 建议时间：Day 1 ~ Day 3（奠基阶段）</span>
+                            </div>
+                        </div>
+                        <span class="phase-badge">核心基石</span>
+                    </div>
+
+                    <div class="phase-goal">
+                        🎯 <strong>阶段学习目标：</strong>深刻理解“工作区、暂存区、版本库”的三层架构，掌握单人开发下的提交、比对、撤销等核心循环。
+                    </div>
+
+                    <div class="task-list">
+                        <div class="task-item" onclick="toggleTask(this, 'task1_1')">
+                            <input type="checkbox" class="custom-checkbox" id="task1_1">
+                            <div class="task-content">
+                                <div class="task-title">
+                                    <span>环境配置与初始化仓库</span>
+                                    <code>git config</code> <code>git init</code>
+                                </div>
+                                <div class="task-desc">
+                                    配置全局用户名与邮箱（关联以后的 GitHub 提交记录）；在本地文件夹初始化 <code>.git</code> 目录。
+                                </div>
+                                <div class="code-block">
+                                    <span>git config --global user.name "你的名字"
+git config --global user.email "you@example.com"
+git init</span>
+                                    <button class="copy-btn" onclick="copyCode(this, event)">复制</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="task-item" onclick="toggleTask(this, 'task1_2')">
+                            <input type="checkbox" class="custom-checkbox" id="task1_2">
+                            <div class="task-content">
+                                <div class="task-title">
+                                    <span>暂存区与提交闭环</span>
+                                    <code>git status</code> <code>git add</code> <code>git commit</code>
+                                </div>
+                                <div class="task-desc">
+                                    查看当前文件状态（Untracked / Modified），将修改提交到暂存区，并附带清晰语义的 commit 消息。
+                                </div>
+                                <div class="code-block">
+                                    <span>git status
+git add .
+git commit -m "feat: 首次初始化基础结构与页面"</span>
+                                    <button class="copy-btn" onclick="copyCode(this, event)">复制</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="task-item" onclick="toggleTask(this, 'task1_3')">
+                            <input type="checkbox" class="custom-checkbox" id="task1_3">
+                            <div class="task-content">
+                                <div class="task-title">
+                                    <span>历史回溯与文件差异比对</span>
+                                    <code>git log</code> <code>git diff</code>
+                                </div>
+                                <div class="task-desc">
+                                    查看简洁美观的提交树图；比对工作区和暂存区之间的代码具体改动行。
+                                </div>
+                                <div class="code-block">
+                                    <span>git log --oneline --graph --all
+git diff</span>
+                                    <button class="copy-btn" onclick="copyCode(this, event)">复制</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="task-item" onclick="toggleTask(this, 'task1_4')">
+                            <input type="checkbox" class="custom-checkbox" id="task1_4">
+                            <div class="task-content">
+                                <div class="task-title">
+                                    <span>常见撤销与后悔药命令</span>
+                                    <code>git restore</code> <code>git rm --cached</code>
+                                </div>
+                                <div class="task-desc">
+                                    丢弃工作区的未保存改动；或将错误 <code>git add</code> 到暂存区的文件移出（但保留本地文件）。
+                                </div>
+                                <div class="code-block">
+                                    <span>git restore <文件名>          # 丢弃工作区改动
+git rm --cached <文件名>       # 从暂存区移出，取消跟踪</span>
+                                    <button class="copy-btn" onclick="copyCode(this, event)">复制</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 阶段二 -->
+                <div class="phase-card">
+                    <div class="phase-header">
+                        <div class="phase-meta">
+                            <div class="phase-number">02</div>
+                            <div class="phase-title-group">
+                                <h2>阶段二：分支艺术与冲突管理</h2>
+                                <span class="phase-time">⏱️ 建议时间：Day 4 ~ Day 7（进阶分水岭）</span>
+                            </div>
+                        </div>
+                        <span class="phase-badge">高频必考</span>
+                    </div>
+
+                    <div class="phase-goal">
+                        🎯 <strong>阶段学习目标：</strong>搞懂分支指针的本质，学会在隔离环境下开发功能（Feature Branch），并熟练处理 Merge 冲突与临时存储。
+                    </div>
+
+                    <div class="task-list">
+                        <div class="task-item" onclick="toggleTask(this, 'task2_1')">
+                            <input type="checkbox" class="custom-checkbox" id="task2_1">
+                            <div class="task-content">
+                                <div class="task-title">
+                                    <span>现代分支创建与切换语法</span>
+                                    <code>git switch</code> <code>git branch</code>
+                                </div>
+                                <div class="task-desc">
+                                    掌握官方推荐的 <code>git switch</code>（替代过去语义混乱的 <code>checkout</code>），创建并快速切换特性分支。
+                                </div>
+                                <div class="code-block">
+                                    <span>git switch -c feature/login    # 创建并切换到新分支
+git branch -a                  # 列出所有本地及远程分支</span>
+                                    <button class="copy-btn" onclick="copyCode(this, event)">复制</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="task-item" onclick="toggleTask(this, 'task2_2')">
+                            <input type="checkbox" class="custom-checkbox" id="task2_2">
+                            <div class="task-content">
+                                <div class="task-title">
+                                    <span>分支合并与差异：Fast-Forward 与三方合并</span>
+                                    <code>git merge</code>
+                                </div>
+                                <div class="task-desc">
+                                    理解快进合并（Fast-Forward）与 <code>--no-ff</code> 创建独立 merge 节点的不同使用场景。
+                                </div>
+                                <div class="code-block">
+                                    <span>git switch main
+git merge --no-ff feature/login -m "merge: 合并登录模块到主分支"</span>
+                                    <button class="copy-btn" onclick="copyCode(this, event)">复制</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="task-item" onclick="toggleTask(this, 'task2_3')">
+                            <input type="checkbox" class="custom-checkbox" id="task2_3">
+                            <div class="task-content">
+                                <div class="task-title">
+                                    <span>代码冲突（Conflict）实战解决</span>
+                                    <code><<<<<<< HEAD</code> <code>=======</code>
+                                </div>
+                                <div class="task-desc">
+                                    模拟两人修改同一行代码产生的冲突标记，手动保留合适代码，再执行 <code>add & commit</code> 完成解决。
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="task-item" onclick="toggleTask(this, 'task2_4')">
+                            <input type="checkbox" class="custom-checkbox" id="task2_4">
+                            <div class="task-content">
+                                <div class="task-title">
+                                    <span>工作现场临时封存与恢复</span>
+                                    <code>git stash</code>
+                                </div>
+                                <div class="task-desc">
+                                    当做到一半有紧急 Bug 需要切主分支修时，用暂存袋将当前半成品代码先打包存起来。
+                                </div>
+                                <div class="code-block">
+                                    <span>git stash save "正在开发的半成品组件"
+git stash pop                  # 恢复并弹出最新的一份暂存</span>
+                                    <button class="copy-btn" onclick="copyCode(this, event)">复制</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 阶段三 -->
+                <div class="phase-card">
+                    <div class="phase-header">
+                        <div class="phase-meta">
+                            <div class="phase-number">03</div>
+                            <div class="phase-title-group">
+                                <h2>阶段三：远程协同与团队工作流（GitHub / Gitee）</h2>
+                                <span class="phase-time">⏱️ 建议时间：Day 8 ~ Day 11（实战协作）</span>
+                            </div>
+                        </div>
+                        <span class="phase-badge">团队必备</span>
+                    </div>
+
+                    <div class="phase-goal">
+                        🎯 <strong>阶段学习目标：</strong>联通云端，熟练使用 SSH Key 免密认证、Pull Request (PR) 流程以及主流团队工作流（GitHub Flow / Git Flow）。
+                    </div>
+
+                    <div class="task-list">
+                        <div class="task-item" onclick="toggleTask(this, 'task3_1')">
+                            <input type="checkbox" class="custom-checkbox" id="task3_1">
+                            <div class="task-content">
+                                <div class="task-title">
+                                    <span>SSH 秘钥配置与关联远程仓库</span>
+                                    <code>ssh-keygen</code> <code>git remote</code>
+                                </div>
+                                <div class="task-desc">
+                                    生成 ed25519 或 rsa 密钥并添加到 GitHub Settings；使用 <code>git remote add origin</code> 连接仓库。
+                                </div>
+                                <div class="code-block">
+                                    <span>ssh-keygen -t ed25519 -C "you@example.com"
+git remote add origin git@github.com:username/repo.git
+git push -u origin main</span>
+                                    <button class="copy-btn" onclick="copyCode(this, event)">复制</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="task-item" onclick="toggleTask(this, 'task3_2')">
+                            <input type="checkbox" class="custom-checkbox" id="task3_2">
+                            <div class="task-content">
+                                <div class="task-title">
+                                    <span>日常推送与拉取：Fetch vs Pull 的底层差异</span>
+                                    <code>git fetch</code> <code>git pull</code>
+                                </div>
+                                <div class="task-desc">
+                                    理解 <code>git pull = git fetch + git merge</code>。掌握推荐的 <code>git pull --rebase</code> 保持干净线性历史。
+                                </div>
+                                <div class="code-block">
+                                    <span>git pull --rebase origin main</span>
+                                    <button class="copy-btn" onclick="copyCode(this, event)">复制</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="task-item" onclick="toggleTask(this, 'task3_3')">
+                            <input type="checkbox" class="custom-checkbox" id="task3_3">
+                            <div class="task-content">
+                                <div class="task-title">
+                                    <span>Pull Request (PR) / Merge Request (MR) 完整演练</span>
+                                    <code>Fork</code> <code>PR</code> <code>Code Review</code>
+                                </div>
+                                <div class="task-desc">
+                                    通过 Fork 他人项目或在团队仓库新建 feature 分支发起 PR，模拟 Code Review 评审与合并流程。
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="task-item" onclick="toggleTask(this, 'task3_4')">
+                            <input type="checkbox" class="custom-checkbox" id="task3_4">
+                            <div class="task-content">
+                                <div class="task-title">
+                                    <span>忽略规则与文件清理</span>
+                                    <code>.gitignore</code> <code>git rm</code>
+                                </div>
+                                <div class="task-desc">
+                                    规范编写 <code>.gitignore</code>（过滤 node_modules、.env、IDE 配置等）；处理不小心已被提交到仓库的垃圾文件。
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 阶段四 -->
+                <div class="phase-card">
+                    <div class="phase-header">
+                        <div class="phase-meta">
+                            <div class="phase-number">04</div>
+                            <div class="phase-title-group">
+                                <h2>阶段四：高阶技巧与终极后悔药（资深必备）</h2>
+                                <span class="phase-time">⏱️ 建议时间：Day 12 ~ Day 15（分水岭进阶）</span>
+                            </div>
+                        </div>
+                        <span class="phase-badge">架构进阶</span>
+                    </div>
+
+                    <div class="phase-goal">
+                        🎯 <strong>阶段学习目标：</strong>掌握交互式变基整理优雅历史、精确移植指定提交、利用底层 Reflog 救回被误删的分支与代码。
+                    </div>
+
+                    <div class="task-list">
+                        <div class="task-item" onclick="toggleTask(this, 'task4_1')">
+                            <input type="checkbox" class="custom-checkbox" id="task4_1">
+                            <div class="task-content">
+                                <div class="task-title">
+                                    <span>交互式变基：合并与美化提交历史</span>
+                                    <code>git rebase -i</code> <code>squash</code>
+                                </div>
+                                <div class="task-desc">
+                                    将本地杂乱的诸如 "fix typo"、"bugfix 1" 等多个碎片提交压缩合并（Squash）成一个高质量提交后再推远端。
+                                </div>
+                                <div class="code-block">
+                                    <span>git rebase -i HEAD~3</span>
+                                    <button class="copy-btn" onclick="copyCode(this, event)">复制</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="task-item" onclick="toggleTask(this, 'task4_2')">
+                            <input type="checkbox" class="custom-checkbox" id="task4_2">
+                            <div class="task-content">
+                                <div class="task-title">
+                                    <span>精准摘取单次提交</span>
+                                    <code>git cherry-pick</code>
+                                </div>
+                                <div class="task-desc">
+                                    跨分支单点提取某个修复 Bug 或特性的 commit hash，并无缝重放到当前分支上。
+                                </div>
+                                <div class="code-block">
+                                    <span>git cherry-pick <commit-hash></span>
+                                    <button class="copy-btn" onclick="copyCode(this, event)">复制</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="task-item" onclick="toggleTask(this, 'task4_3')">
+                            <input type="checkbox" class="custom-checkbox" id="task4_3">
+                            <div class="task-content">
+                                <div class="task-title">
+                                    <span>绝境重生的“全黑盒飞行记录仪”</span>
+                                    <code>git reflog</code>
+                                </div>
+                                <div class="task-desc">
+                                    即使执行了 <code>git reset --hard</code> 或者误删了本地分支，也能在 reflog 里找到悬空指针并一键复活。
+                                </div>
+                                <div class="code-block">
+                                    <span>git reflog
+git reset --hard HEAD@{3}      # 恢复到第 3 步之前的任何操作状态</span>
+                                    <button class="copy-btn" onclick="copyCode(this, event)">复制</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="task-item" onclick="toggleTask(this, 'task4_4')">
+                            <input type="checkbox" class="custom-checkbox" id="task4_4">
+                            <div class="task-content">
+                                <div class="task-title">
+                                    <span>二分排查法定位 Bug 罪魁祸首</span>
+                                    <code>git bisect</code> <code>git blame</code>
+                                </div>
+                                <div class="task-desc">
+                                    自动化二分法查找是哪一次历史 commit 引入了重大 Bug；查看某一行代码的作者和修改背景。
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 阶段五 -->
+                <div class="phase-card">
+                    <div class="phase-header">
+                        <div class="phase-meta">
+                            <div class="phase-number">05</div>
+                            <div class="phase-title-group">
+                                <h2>阶段五：工程化规范与效能工具</h2>
+                                <span class="phase-time">⏱️ 建议时间：Day 16+（工程化与终身受益）</span>
+                            </div>
+                        </div>
+                        <span class="phase-badge">工程标准</span>
+                    </div>
+
+                    <div class="phase-goal">
+                        🎯 <strong>阶段学习目标：</strong>落地企业级 Commit 规范（Conventional Commits），配置自动化 Hooks 校验，并使用现代化效率终端工具。
+                    </div>
+
+                    <div class="task-list">
+                        <div class="task-item" onclick="toggleTask(this, 'task5_1')">
+                            <input type="checkbox" class="custom-checkbox" id="task5_1">
+                            <div class="task-content">
+                                <div class="task-title">
+                                    <span>Conventional Commits 规范化提交信息</span>
+                                    <code>feat:</code> <code>fix:</code> <code>docs:</code> <code>refactor:</code>
+                                </div>
+                                <div class="task-desc">
+                                    遵循业界通用的提交前缀约定，配合 commitlint 与 husky，在 commit 时自动校验信息格式。
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="task-item" onclick="toggleTask(this, 'task5_2')">
+                            <input type="checkbox" class="custom-checkbox" id="task5_2">
+                            <div class="task-content">
+                                <div class="task-title">
+                                    <span>Git 快捷别名（Aliases）打造专属高效工作流</span>
+                                    <code>git config alias</code>
+                                </div>
+                                <div class="task-desc">
+                                    给冗长的常用命令配置极简短别名，每天节约大量敲键盘时间。
+                                </div>
+                                <div class="code-block">
+                                    <span>git config --global alias.st status
+git config --global alias.co checkout
+git config --global alias.lg "log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"</span>
+                                    <button class="copy-btn" onclick="copyCode(this, event)">复制</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="task-item" onclick="toggleTask(this, 'task5_3')">
+                            <input type="checkbox" class="custom-checkbox" id="task5_3">
+                            <div class="task-content">
+                                <div class="task-title">
+                                    <span>体验现代化辅助 GUI / TUI 生产力工具</span>
+                                    <code>lazygit</code> <code>VSCode GitLens</code>
+                                </div>
+                                <div class="task-desc">
+                                    在掌握命令行原理的基础上，拥抱 <code>lazygit</code> 终端看板或 VSCode GitLens 插件，让效率提升数倍。
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="task-item" onclick="toggleTask(this, 'task5_4')">
+                            <input type="checkbox" class="custom-checkbox" id="task5_4">
+                            <div class="task-content">
+                                <div class="task-title">
+                                    <span>版本发布与打 Tag 规范</span>
+                                    <code>git tag</code>
+                                </div>
+                                <div class="task-desc">
+                                    配合语义化版本号（Semantic Versioning 如 v1.0.0）为生产发布打附注标签并推向远端 Releases。
+                                </div>
+                                <div class="code-block">
+                                    <span>git tag -a v1.0.0 -m "Release version 1.0.0"
+git push origin v1.0.0</span>
+                                    <button class="copy-btn" onclick="copyCode(this, event)">复制</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- TAB 2: 常用高频速查 -->
+        <div id="tab-cheatsheet" class="tab-pane">
+            <div class="cheatsheet-grid">
+                <div class="cheat-card">
+                    <h3>⚡ 初始化与配置</h3>
+                    <div class="cheat-row">
+                        <div class="cheat-cmd"><span>git init</span></div>
+                        <div class="cheat-desc">初始化本地 Git 仓库</div>
+                    </div>
+                    <div class="cheat-row">
+                        <div class="cheat-cmd"><span>git clone &lt;url&gt;</span></div>
+                        <div class="cheat-desc">克隆远端仓库到本地</div>
+                    </div>
+                    <div class="cheat-row">
+                        <div class="cheat-cmd"><span>git config -l --global</span></div>
+                        <div class="cheat-desc">查看全局用户配置信息</div>
+                    </div>
+                </div>
+
+                <div class="cheat-card">
+                    <h3>📁 暂存与日常提交</h3>
+                    <div class="cheat-row">
+                        <div class="cheat-cmd"><span>git status -s</span></div>
+                        <div class="cheat-desc">精简输出当前文件状态</div>
+                    </div>
+                    <div class="cheat-row">
+                        <div class="cheat-cmd"><span>git add -A</span></div>
+                        <div class="cheat-desc">将所有变更（新增/修改/删除）加入暂存区</div>
+                    </div>
+                    <div class="cheat-row">
+                        <div class="cheat-cmd"><span>git commit -m "msg"</span></div>
+                        <div class="cheat-desc">将暂存区内容生成正式提交记录</div>
+                    </div>
+                    <div class="cheat-row">
+                        <div class="cheat-cmd"><span>git commit --amend</span></div>
+                        <div class="cheat-desc">将当前暂存改动追加合并到上一次提交，修改说明</div>
+                    </div>
+                </div>
+
+                <div class="cheat-card">
+                    <h3>🌿 分支与合并</h3>
+                    <div class="cheat-row">
+                        <div class="cheat-cmd"><span>git switch -c &lt;name&gt;</span></div>
+                        <div class="cheat-desc">创建并切换至新分支</div>
+                    </div>
+                    <div class="cheat-row">
+                        <div class="cheat-cmd"><span>git switch &lt;name&gt;</span></div>
+                        <div class="cheat-desc">切换到已存在的本地分支</div>
+                    </div>
+                    <div class="cheat-row">
+                        <div class="cheat-cmd"><span>git merge &lt;branch&gt;</span></div>
+                        <div class="cheat-desc">将指定分支合并到当前分支</div>
+                    </div>
+                    <div class="cheat-row">
+                        <div class="cheat-cmd"><span>git branch -d &lt;name&gt;</span></div>
+                        <div class="cheat-desc">安全删除已合并的分支（-D 强删）</div>
+                    </div>
+                </div>
+
+                <div class="cheat-card">
+                    <h3>☁️ 远程交互</h3>
+                    <div class="cheat-row">
+                        <div class="cheat-cmd"><span>git remote -v</span></div>
+                        <div class="cheat-desc">查看远程仓库详细地址</div>
+                    </div>
+                    <div class="cheat-row">
+                        <div class="cheat-cmd"><span>git fetch origin</span></div>
+                        <div class="cheat-desc">拉取远程最新分支指针，但不自动合并</div>
+                    </div>
+                    <div class="cheat-row">
+                        <div class="cheat-cmd"><span>git pull --rebase</span></div>
+                        <div class="cheat-desc">拉取并基于最新远程提交变基，避免无意义合并节点</div>
+                    </div>
+                    <div class="cheat-row">
+                        <div class="cheat-cmd"><span>git push origin &lt;branch&gt;</span></div>
+                        <div class="cheat-desc">推送本地分支到远程仓库</div>
+                    </div>
+                </div>
+
+                <div class="cheat-card">
+                    <h3>📦 暂存袋与现场保护</h3>
+                    <div class="cheat-row">
+                        <div class="cheat-cmd"><span>git stash</span></div>
+                        <div class="cheat-desc">将未提交的修改保存到储藏栈</div>
+                    </div>
+                    <div class="cheat-row">
+                        <div class="cheat-cmd"><span>git stash pop</span></div>
+                        <div class="cheat-desc">恢复最近一次储藏并从栈中删除</div>
+                    </div>
+                    <div class="cheat-row">
+                        <div class="cheat-cmd"><span>git stash list</span></div>
+                        <div class="cheat-desc">列出所有暂存的记录清单</div>
+                    </div>
+                </div>
+
+                <div class="cheat-card">
+                    <h3>🔍 查看与比对</h3>
+                    <div class="cheat-row">
+                        <div class="cheat-cmd"><span>git diff --staged</span></div>
+                        <div class="cheat-desc">比对暂存区与最后一次提交的差异</div>
+                    </div>
+                    <div class="cheat-row">
+                        <div class="cheat-cmd"><span>git log -n 5 --oneline</span></div>
+                        <div class="cheat-desc">查看最近 5 条极简单行提交记录</div>
+                    </div>
+                    <div class="cheat-row">
+                        <div class="cheat-cmd"><span>git blame &lt;file&gt;</span></div>
+                        <div class="cheat-desc">逐行显示每行代码的作者与 commit 时间</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 3: Git 急救箱 (常见翻车处理) -->
+        <div id="tab-emergency" class="tab-pane">
+            <div class="emergency-grid">
+                <div class="emergency-card">
+                    <div class="emergency-q">⚠️ 场景 1：刚做完一次 commit，发现写错或者少加了一个文件？</div>
+                    <div class="emergency-solution">
+                        不要慌！直接把漏掉的文件 <code>git add</code> 暂存，然后执行追加修复命令，将不会产生多余的垃圾 commit：
+                    </div>
+                    <div class="code-block">
+                        <span>git add 遗漏的文件
+git commit --amend --no-edit   # 合并到上一次提交且不修改提交信息</span>
+                        <button class="copy-btn" onclick="copyCode(this, event)">复制</button>
+                    </div>
+                </div>
+
+                <div class="emergency-card">
+                    <div class="emergency-q">⚠️ 场景 2：工作区写乱了，想彻底放弃某个文件的修改，恢复成最后一次 commit 的样子？</div>
+                    <div class="emergency-solution">
+                        使用现代 restore 命令一键复原：
+                    </div>
+                    <div class="code-block">
+                        <span>git restore &lt;文件路径&gt;        # 放弃单个文件修改
+git restore .                 # 放弃当前目录下所有文件的未暂存修改</span>
+                        <button class="copy-btn" onclick="copyCode(this, event)">复制</button>
+                    </div>
+                </div>
+
+                <div class="emergency-card">
+                    <div class="emergency-q">⚠️ 场景 3：手滑把代码全部 hard reset 回去了，或者误删了一个分支？代码找不到了！</div>
+                    <div class="emergency-solution">
+                        只要你的代码曾经 <code>commit</code> 过，Git 就绝不会轻易丢弃它！使用飞行记录仪 <code>reflog</code> 找到它死前的 Hash，瞬间复活：
+                    </div>
+                    <div class="code-block">
+                        <span>git reflog                    # 查看你最近敲过的所有动作及对应的 HEAD 索引
+git reset --hard HEAD@{1}     # 瞬间穿越回到执行 reset 之前的那一刻！</span>
+                        <button class="copy-btn" onclick="copyCode(this, event)">复制</button>
+                    </div>
+                </div>
+
+                <div class="emergency-card">
+                    <div class="emergency-q">⚠️ 场景 4：合并分支发生冲突（Merge Conflict），发现改乱了想彻底终止本次合并？</div>
+                    <div class="emergency-solution">
+                        随时可以通过 abort 参数直接取消本次合并，工作区立刻回到合并前的状态：
+                    </div>
+                    <div class="code-block">
+                        <span>git merge --abort             # 放弃当前处于冲突中的合并动作</span>
+                        <button class="copy-btn" onclick="copyCode(this, event)">复制</button>
+                    </div>
+                </div>
+
+                <div class="emergency-card">
+                    <div class="emergency-q">⚠️ 场景 5：提交了敏感配置（如 API Key 或 .env 文件），如何从版本树中抹除？</div>
+                    <div class="emergency-solution">
+                        如果还没推送到远程仓库，可以使用重置并强制重新提交；如果已经推到远程，优先推荐使用 <code>git-filter-repo</code> 或 BFG Repo-Cleaner 工具彻底净化提交历史。
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 4: 精选工具与进阶资源 -->
+        <div id="tab-resources" class="tab-pane">
+            <a href="https://learngitbranching.js.org/?locale=zh_CN" target="_blank" class="resource-card">
+                <div class="resource-info">
+                    <h4>🎮 Learn Git Branching（可视化闯关游戏）</h4>
+                    <p>全球公认最佳的 Git 交互式沙盒学习网站，图形化演示分支、Rebase、Cherry-pick 过程，强烈推荐玩通关！</p>
+                </div>
+                <span class="resource-tag">交互式闯关 · 必刷</span>
+            </a>
+
+            <a href="https://git-scm.com/book/zh/v2" target="_blank" class="resource-card">
+                <div class="resource-info">
+                    <h4>📖 Pro Git 官方中文版第二版（圣经级教材）</h4>
+                    <p>Git 官方维护的最权威免费电子书，由浅入深剖析 Git 内部原理（Object、Tree、Blob）与工程最佳实践。</p>
+                </div>
+                <span class="resource-tag">官方权威 · 免费</span>
+            </a>
+
+            <a href="https://github.com/jesseduffield/lazygit" target="_blank" class="resource-card">
+                <div class="resource-info">
+                    <h4>⚡ Lazygit（神器级终端 TUI）</h4>
+                    <p>基于终端的极简强大 Git 管理器，键位优雅直觉，单键完成暂存、变基、分支切换，极客生产力倍增器。</p>
+                </div>
+                <span class="resource-tag">效能利器 · 80k+ Stars</span>
+            </a>
+
+            <a href="https://www.conventionalcommits.org/zh-hans/v1.0.0/" target="_blank" class="resource-card">
+                <div class="resource-info">
+                    <h4>📐 约定式提交规范（Conventional Commits）</h4>
+                    <p>大厂开源项目标准提交流范式，结合语义化版本，能自动生成 Changelog 变更日志与版本发布记录。</p>
+                </div>
+                <span class="resource-tag">团队规范 · 行业标准</span>
+            </a>
+
+            <a href="https://ohshitgit.com/zh" target="_blank" class="resource-card">
+                <div class="resource-info">
+                    <h4>🆘 Oh Shit, Git!?!（Git 翻车自救手册中文版）</h4>
+                    <p>“糟糕！又把 Git 搞砸了？”，用直白通俗的日常语言告诉你各种灾难现场如何一步步优雅解决。</p>
+                </div>
+                <span class="resource-tag">灾难自救 · 幽默实用</span>
+            </a>
+        </div>
+    </main>
+
+    <!-- Floating Copy Toast Notification -->
+    <div id="toast">
+        <span style="color:#10b981;">✔</span> 已将命令复制到剪贴板！
+    </div>
+
+    <!-- Interactive Script -->
+    <script>
+        const STORAGE_KEY = "git_study_roadmap_tasks_v1";
+
+        // Tab Switching
+        function switchTab(tabId, btn) {
+            document.querySelectorAll('.tab-pane').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+
+            const targetPane = document.getElementById('tab-' + tabId);
+            if (targetPane) {
+                targetPane.classList.add('active');
+            }
+            if (btn) {
+                btn.classList.add('active');
+            }
+        }
+
+        // Copy Code Functionality
+        function copyCode(btn, event) {
+            event.stopPropagation();
+            const codeBlock = btn.parentElement.querySelector('span');
+            if (!codeBlock) return;
+
+            const text = codeBlock.innerText.trim();
+            navigator.clipboard.writeText(text).then(() => {
+                showToast();
+            }).catch(err => {
+                console.error("复制失败:", err);
+            });
+        }
+
+        function showToast() {
+            const toast = document.getElementById('toast');
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 2000);
+        }
+
+        // Task Completion & LocalStorage
+        function loadTaskState() {
+            const saved = localStorage.getItem(STORAGE_KEY);
+            const state = saved ? JSON.parse(saved) : {};
+
+            document.querySelectorAll('.task-item').forEach(item => {
+                const checkbox = item.querySelector('.custom-checkbox');
+                if (checkbox && state[checkbox.id]) {
+                    checkbox.checked = true;
+                    item.classList.add('completed');
+                } else {
+                    if (checkbox) checkbox.checked = false;
+                    item.classList.remove('completed');
+                }
+            });
+
+            updateProgress();
+        }
+
+        function saveTaskState() {
+            const state = {};
+            document.querySelectorAll('.custom-checkbox').forEach(cb => {
+                state[cb.id] = cb.checked;
+            });
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+        }
+
+        function toggleTask(item, id) {
+            const checkbox = document.getElementById(id);
+            if (!checkbox) return;
+
+            checkbox.checked = !checkbox.checked;
+            if (checkbox.checked) {
+                item.classList.add('completed');
+            } else {
+                item.classList.remove('completed');
+            }
+
+            saveTaskState();
+            updateProgress();
+        }
+
+        // Prevent double toggle when clicking directly on checkbox
+        document.querySelectorAll('.custom-checkbox').forEach(cb => {
+            cb.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const item = cb.closest('.task-item');
+                if (cb.checked) {
+                    item.classList.add('completed');
+                } else {
+                    item.classList.remove('completed');
+                }
+                saveTaskState();
+                updateProgress();
+            });
+        });
+
+        function updateProgress() {
+            const allCheckboxes = document.querySelectorAll('.custom-checkbox');
+            const total = allCheckboxes.length;
+            let checkedCount = 0;
+
+            allCheckboxes.forEach(cb => {
+                if (cb.checked) checkedCount++;
+            });
+
+            const percent = total > 0 ? Math.round((checkedCount / total) * 100) : 0;
+
+            document.getElementById('completedCount').innerText = `${checkedCount} / ${total}`;
+            document.getElementById('progressPercentage').innerText = `${percent}%`;
+            document.getElementById('progressBar').style.width = `${percent}%`;
+        }
+
+        // Initialize on load
+        window.addEventListener('DOMContentLoaded', () => {
+            loadTaskState();
+        });
+    </script>
+</body>
+</html>
